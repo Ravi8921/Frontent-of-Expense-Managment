@@ -1,9 +1,22 @@
-import React from 'react';
-import ReactDom from "react-dom";
+const express = require('express');
+var bodyParser = require('body-parser');
 
-import './index.css'
+const route = require('./routes/route.js');
 
-import App from './App';
+const app = express();
 
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
-ReactDom.render(<App />, document.getElementById('root'));
+const mongoose = require('mongoose');
+const { response } = require('express');
+
+mongoose.connect("mongodb+srv://shatrudhan:Sk882515@cluster0.ampcw.mongodb.net/Movies_DB?retryWrites=true&w=majority")
+    .then(() => console.log('mongodb running on 27017'))
+    .catch(err => console.log(err))
+
+app.use('/', route);
+
+app.listen(process.env.PORT || 3001, function () {
+    console.log('Express app running on port ' + (process.env.PORT || 3001))
+});
